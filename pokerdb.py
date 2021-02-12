@@ -1,5 +1,10 @@
+import logging
 import mysql.connector
+import sys
 
+from logger import logger
+
+@logger
 def createDB():
     dbCon = mysql.connector.connect(
         host='sql_cnt',
@@ -12,6 +17,7 @@ def createDB():
     dbCon.commit()
     dbCon.close()
 
+@logger
 def createTableAndInsert(players):
     dbCon = mysql.connector.connect(
         host='sql_cnt',
@@ -21,7 +27,26 @@ def createTableAndInsert(players):
         database='pokerdb'
     )
     cursor = dbCon.cursor()
-    cursor.execute('CREATE TABLE IF NOT EXISTS ALL_TIME_PLAYERS (ID INT PRIMARY KEY AUTO_INCREMENT, RANKING smallint NOT NULL, FIRST_NAME varchar(20), LAST_NAME varchar(20), NATIONALITY varchar(20), MONEY_WON int, HIGHEST_WIN int);')
-    cursor.executemany('INSERT INTO ALL_TIME_PLAYERS (RANKING, FIRST_NAME, LAST_NAME, NATIONALITY, MONEY_WON, HIGHEST_WIN) VALUES (%s, %s, %s, %s, %s, %s);', players)
+    cursor.execute('''CREATE TABLE IF NOT EXISTS ALL_TIME_PLAYERS (
+                    ID INT PRIMARY KEY AUTO_INCREMENT,
+                    RANKING smallint NOT NULL,
+                    FIRST_NAME varchar(20),
+                    LAST_NAME varchar(20),
+                    NATIONALITY varchar(20),
+                    MONEY_WON int,
+                    HIGHEST_WIN int);'''
+    )
+    cursor.executemany('''INSERT INTO ALL_TIME_PLAYERS
+                        (RANKING, FIRST_NAME, LAST_NAME, NATIONALITY, MONEY_WON, HIGHEST_WIN)
+                        VALUES (%s, %s, %s, %s, %s, %s);''', players)
     dbCon.commit()
     dbCon.close()
+
+@logger
+def handleDB(players):
+    try:
+        createDB()
+        createTableAndInsert(players)
+    except mysql.connector.Error as err:
+        logging.error(f'{err}')
+        sys.exit(1)
