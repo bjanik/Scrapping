@@ -1,14 +1,18 @@
 #!/bin/bash
-set -e
+set -ex
 
-docker run -d --name sql_cnt -e MYSQL_ROOT_PASSWORD=totoxxx123 mysql  # Run mysql container
-docker run -itd --name python_scrap_cnt python_scrapping # Run python container
+SQL_CNT='sql_cnt'
+SCRAP_CNT='python_scrap_cnt'
+DB_NAME='pokerdb'
+NETWORK='scrapping'
+USER='root'
+PASSWORD='totoxxx123'
 
-docker network create scrapping # Create a new docker network
+docker run -d --name $SQL_CNT -e MYSQL_ROOT_PASSWORD=$PASSWORD -e MYSQL_DATABASE=$DB_NAME -e MYSQL_USER=$USER -e MYSQL_HOST=$SQL_CNT mysql # Run mysql container
+docker run -itd --name $SCRAP_CNT --mount type=bind,src=$(PWD)/app,dst=/app python_scrapping # Run python container
 
-docker network connect scrapping python_scrap_cnt # Connect python container to previously created network
-docker network connect scrapping sql_cnt # Connect sql container to previously created network
+docker network create $NETWORK # Create a new docker network
+docker network connect $NETWORK $SCRAP_CNT # Connect python container to previously created network
+docker network connect $NETWORK $SQL_CNT # Connect sql container to previously created network
 
-docker exec -it python_scrap_cnt python3 main.py # Run python script in container
-
-docker exec -it sql_cnt mysql -uroot -ptotoxxx123 --execute 'use pokerdb; SELECT * FROM ALL_TIME_PLAYERS;'
+docker exec -it $SCRAP_CNT python3 main.py # Run python script in container
