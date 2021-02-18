@@ -1,7 +1,7 @@
 FROM python:latest
 
-WORKDIR /scrap
+WORKDIR /app
 
 RUN pip3 install requests bs4 mysql-connector-python
 
-COPY *.py .
+COPY app .
