@@ -1,0 +1,35 @@
+version: "3"
+services:
+  db:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=totoxxx123
+      - MYSQL_DATABASE=pokerdb
+      - MYSQL_USER=root
+  flask:
+    build: ./flask
+    environment:
+      - FLASK_ENV=development
+      - FLASK_RUN_PORT=4000
+      - MYSQL_ROOT_PASSWORD=totoxxx123
+      - MYSQL_DATABASE=pokerdb
+      - MYSQL_USER=root
+      - MYSQL_HOST=scrapping_db_1
+    ports:
+      - "3000:4000"
+    depends_on:
+      - "scrapper"
+    restart:
+      - "always"
+    command: python3 main.py
+  scrapper:
+    build: ./scrapper
+    environment:
+      - MYSQL_ROOT_PASSWORD=totoxxx123
+      - MYSQL_DATABASE=pokerdb
+      - MYSQL_USER=root
+      - MYSQL_HOST=scrapping_db_1
+    depends_on:
+      - "db"
+    command: python3 main.py
+
