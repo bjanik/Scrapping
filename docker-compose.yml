@@ -6,6 +6,9 @@ services:
       - MYSQL_ROOT_PASSWORD=totoxxx123
       - MYSQL_DATABASE=pokerdb
       - MYSQL_USER=root
+    networks:
+      - front-tier
+      - back-tier
   flask:
     build: ./flask
     environment:
@@ -15,13 +18,14 @@ services:
       - MYSQL_DATABASE=pokerdb
       - MYSQL_USER=root
       - MYSQL_HOST=scrapping_db_1
-    ports:
+    ports: 
       - "3000:4000"
     depends_on:
       - "scrapper"
-    restart:
-      - "always"
+    restart: always
     command: python3 main.py
+    networks:
+      - back-tier
   scrapper:
     build: ./scrapper
     environment:
@@ -32,4 +36,9 @@ services:
     depends_on:
       - "db"
     command: python3 main.py
+    networks:
+      - front-tier
 
+networks:
+  front-tier: {}
+  back-tier: {}
