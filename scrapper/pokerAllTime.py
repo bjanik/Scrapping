@@ -10,13 +10,16 @@ BRACELETS_WINNERS_URL = 'https://pokerdb.thehendonmob.com/ranking/128/'
 
 class PokerAllTime:
 
+    def __init__(self, db):
+        self._db = db
+
     @logger
     def load_page(self, url: str):
         content = requests.get(url)
         if content.status_code == 200:
             page = BeautifulSoup(content.text, 'html.parser')
             return page
-    
+
     @logger
     def getPlayersList(self, page):
         table = page.find('table', class_='table--ranking-list')
@@ -37,15 +40,13 @@ class PokerAllTime:
         return money.replace(',', '')
 
     @logger
-    def getPlayersStats(self, playersRanking) -> list:
-        players = []
+    def getPlayersStats(self, playersRanking):
         for player in playersRanking[1:]:
             ranking = player.find('td', class_='place').get_text()[:-2]
             name = player.find('td', class_='name')
             firstName = name.get_text().split()[0]
             lastName = name.get_text().split()[1]
-            nationality = player.find('td', class_='flag').get_text()
+            nationality = player.find('td', class_='flag').get_text().replace(" ", "_")
             money = self.getMoney(player)
             highestPrize = self.getHighestPrize(name.find_all('a')[1]['href'])
-            players.append((ranking, firstName, lastName, nationality, money, highestPrize))
-        return players
+            self._db.insertInTable((ranking, firstName, lastName, nationality, money, highestPrize))
