@@ -7,6 +7,7 @@ import time
 from bs4 import BeautifulSoup
 
 from logger import logger
+from mail_sender import send_email
 from pokerAllTime import PokerAllTime
 from pokerdb import Database
 
@@ -32,6 +33,8 @@ def main():
         playersRanking = poker.getPlayersList(page)
         poker.getPlayersStats(playersRanking)
         db.dbCon.close()
+        send_email()
+
     logging.info("Scrapping script ends")
 
 if __name__ == '__main__':
