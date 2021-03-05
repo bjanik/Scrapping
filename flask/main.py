@@ -8,10 +8,10 @@ app = Flask(__name__)
 def createConnection():
     con = mysql.connector.connect(
             host=os.environ['MYSQL_HOST'],
-            user='root',
-            password='totoxxx123',
+            user=os.environ['MYSQL_USER'],
+            password=os.environ['MYSQL_PASSWD'],
             auth_plugin='mysql_native_password',
-            database='pokerdb'
+            database=os.environ['MYSQL_DATABASE'],
     )
     return con
 

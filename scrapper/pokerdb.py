@@ -32,3 +32,8 @@ class Database:
     def insertInTable(self, data):
         self._cursor.execute("""INSERT INTO ALL_TIME_PLAYERS (RANKING, FIRST_NAME, LAST_NAME, COUNTRY, MONEY_WON, HIGHEST_WIN) VALUES (%s, %s, %s, %s, %s, %s)""", data)
         self.dbCon.commit()
+
+    @logger
+    def cleanTable(self):
+        self._cursor.execute("TRUNCATE TABLE ALL_TIME_PLAYERS")
+        self.dbCon.commit()

@@ -24,9 +24,9 @@ logging.basicConfig(filename=LOGFILE,
 
 def main():
     logging.info("Scrapping script starts")
-    time.sleep(15)
     db = Database()
     db.createTable()
+    db.cleanTable()
     poker = PokerAllTime(db)
     page = poker.load_page(ALL_TIME_MONEY_LIST_URL)
     if page:
@@ -34,7 +34,6 @@ def main():
         poker.getPlayersStats(playersRanking)
         db.dbCon.close()
         send_email()
-
     logging.info("Scrapping script ends")
 
 if __name__ == '__main__':
