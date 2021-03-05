@@ -2,12 +2,15 @@ import psycopg2
 import dotenv
 import os
 
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify
+
+load_dotenv()
 
 app = Flask(__name__)
 
 def createConnection():
-    con = mysql.connector.connect(
+    con = psycopg2.connect(
             host=os.environ['PGHOST'],
             user=os.environ['PGUSER'],
             password=os.environ['PGPASSWORD'],

@@ -1,7 +1,7 @@
 version: "3"
 services:
   flask:
-    container_name: flask_app
+    container_name: flask_scrap
     build: ./flask
     environment:
       - FLASK_ENV=development

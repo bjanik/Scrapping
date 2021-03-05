@@ -1,6 +1,6 @@
 import logging
-import mysql.connector
 import os
+import psycopg2
 import sys
 
 from logger import logger
@@ -19,7 +19,7 @@ class Database:
     @logger
     def createTable(self):
         self._cursor.execute("""CREATE TABLE IF NOT EXISTS ALL_TIME_PLAYERS (
-                    ID INT PRIMARY KEY AUTO_INCREMENT,
+                    ID SERIAL PRIMARY KEY,
                     RANKING smallint NOT NULL,
                     FIRST_NAME varchar(20),
                     LAST_NAME varchar(20),
