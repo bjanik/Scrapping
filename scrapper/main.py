@@ -4,12 +4,15 @@ import pathlib
 import requests
 import time
 
+from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 
 from logger import logger
 from mail_sender import send_email
 from pokerAllTime import PokerAllTime
 from pokerdb import Database
+
+load_dotenv()
 
 BASE_URL = 'https://pokerdb.thehendonmob.com/'
 ALL_TIME_MONEY_LIST_URL = 'https://pokerdb.thehendonmob.com/ranking/all-time-money-list/'

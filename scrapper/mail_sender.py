@@ -15,7 +15,7 @@ def send_email():
     msg['From'] = EMAIL
     msg['To'] = EMAIL
 
-    s = smtplib.SMTP_SSL(host='smtp.gmail.com', port = 465)
+    s = smtplib.SMTP_SSL(host='smtp.gmail.com', port=465)
     s.login(user=EMAIL, password=PASSWORD)
     s.sendmail(EMAIL, EMAIL, msg.as_string())
     s.quit()

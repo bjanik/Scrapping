@@ -7,12 +7,12 @@ from logger import logger
 
 class Database:
     def __init__(self):
-        self.dbCon = mysql.connector.connect(
-            host=os.environ['MYSQL_HOST'],
-            user=os.environ['MYSQL_USER'],
-            password=os.environ['MYSQL_ROOT_PASSWORD'],
-            auth_plugin='mysql_native_password',
-            database=os.environ['MYSQL_DATABASE']
+        self.dbCon = psycopg2.connect(
+            host=os.environ['PGHOST'],
+            user=os.environ['PGUSER'],
+            password=os.environ['PGPASSWORD'],
+            database=os.environ['PGDATABASE'],
+            port=os.environ['PGPORT']
         )
         self._cursor = self.dbCon.cursor()
 

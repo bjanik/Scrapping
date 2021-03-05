@@ -1,4 +1,5 @@
-import mysql.connector
+import psycopg2
+import dotenv
 import os
 
 from flask import Flask, request, jsonify
@@ -7,11 +8,11 @@ app = Flask(__name__)
 
 def createConnection():
     con = mysql.connector.connect(
-            host=os.environ['MYSQL_HOST'],
-            user=os.environ['MYSQL_USER'],
-            password=os.environ['MYSQL_PASSWD'],
-            auth_plugin='mysql_native_password',
-            database=os.environ['MYSQL_DATABASE'],
+            host=os.environ['PGHOST'],
+            user=os.environ['PGUSER'],
+            password=os.environ['PGPASSWORD'],
+            dbname=os.environ['PGDATABASE'],
+            port=os.environ['PGPORT']
     )
     return con
 
