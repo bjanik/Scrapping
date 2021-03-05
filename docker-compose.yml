@@ -1,44 +1,23 @@
 version: "3"
 services:
-  db:
-    container_name: scraper_db
-    image: mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=myownspeciallongpasswordnoteasytobruteforce
-      - MYSQL_DATABASE=pokerdb
-      - MYSQL_USER=root
-    networks:
-      - front-tier
-      - back-tier
   flask:
     container_name: flask_app
     build: ./flask
     environment:
       - FLASK_ENV=development
       - FLASK_RUN_PORT=4000
-      - MYSQL_ROOT_PASSWORD=myownspeciallongpasswordnoteasytobruteforce
-      - MYSQL_DATABASE=pokerdb
-      - MYSQL_USER=root
-      - MYSQL_HOST=scraper_db
     ports: 
       - 3000:4000
     depends_on:
       - scraper
     restart: always
-    command: ./wait-for-it.sh db:3306 -- python3 main.py
+    command: python3 main.py
     networks:
       - back-tier
   scraper:
     container_name: scraper
     build: ./scrapper
-    environment:
-      - MYSQL_ROOT_PASSWORD=myownspeciallongpasswordnoteasytobruteforce
-      - MYSQL_DATABASE=pokerdb
-      - MYSQL_USER=root
-      - MYSQL_HOST=scraper_db
-    depends_on:
-      - db
-    command: ./wait-for-it.sh db:3306 -- python3 main.py
+    command: python3 main.py
     networks:
       - front-tier
 
